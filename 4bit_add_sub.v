@@ -8,27 +8,38 @@ module add_sub(
     );
 
     wire [3:0] p, q, r, g;             
-    wire cin, coutb, t, l;                  
+    wire cin, coutb, t, l;
+    wire mux_out;                              
 
     xor G1(p[0], b[0], m);
     xor G2(p[1], b[1], m);
     xor G3(p[2], b[2], m);
     xor G4(p[3], b[3], m);
+    
     not G5(t,coutb);
     and G6(l,t,m);
+    
     xor G7(r[0], q[0], l);
     xor G8(r[1], q[1], l);
     xor G9(r[2], q[2], l);
     xor G10(r[3], q[3], l);
+    
 
     assign g[3:0]=4'b0000;  
     assign cin = m;
     
     RAC RAC1(q, coutb, a, p, cin);
     RAC RAC2(s, cout, r, g, l);
-    
+      
+    mux2x1 mux_instance (
+        .a(coutb),     
+        .b(1'b0),      
+        .sel(m),   
+        .y(mux_out)     
+    );
 
-
+     assign cout = mux_out;
+     
 endmodule
 
 module RAC(s, cout, a, b, cin);
@@ -55,4 +66,15 @@ module FA(s, c, x, y, z);
     assign s = x ^ y ^ z;   
     assign c = (x & y) | (y & z) | (x & z);
     
+endmodule
+
+module mux2x1(
+    input a,      
+    input b,       
+    input sel,  
+    output y       
+    );
+
+    assign y = (sel == 0) ? a : b;   
+
 endmodule
