@@ -12,9 +12,9 @@ parameter [15:0] CORRECT_PIN = 16'b1000_0110_0100_0010;
 parameter MAX_ATTEMPTS = 3;
 parameter LOCK_DURATION = 5;
 
-reg [1:0] attempts;           // Counter for incorrect attempts
-reg [5:0] lock_timer;         // Timer for lock duration
-reg lock_timer_active;        // Flag to indicate lock is active
+reg [1:0] attempts;          
+reg [5:0] lock_timer;      
+reg lock_timer_active;      
 
 always @(posedge clk or posedge reset) begin
     if (reset) begin
