@@ -18,7 +18,7 @@ reg lock_timer_active;
 
 always @(posedge clk or posedge reset) begin
     if (reset) begin
-        // Reset the system
+
         access_granted <= 0;
         access_denied <= 0;
         attempts <= 0;
@@ -26,23 +26,23 @@ always @(posedge clk or posedge reset) begin
         lock_timer <= 0;
     end 
     else if (lock_timer_active) begin
-        // Lock active, increment timer
+        
         if (lock_timer < LOCK_DURATION) begin
             lock_timer <= lock_timer + 1;
         end else begin
-            // Unlock system after timer expires
+
             lock_timer_active <= 0;
             lock_timer <= 0;
-            attempts <= 0;  // Reset attempts after lock duration
+            attempts <= 0;  
             access_denied <= 0;
         end
     end 
     else begin
-        // Normal operation
+
         if (pin_input == CORRECT_PIN) begin
             access_granted <= 1;
             access_denied <= 0;
-            attempts <= 0;  // Reset attempts on successful entry
+            attempts <= 0;  
         end 
         else begin
             access_granted <= 0;
@@ -50,11 +50,11 @@ always @(posedge clk or posedge reset) begin
                 attempts <= attempts + 1;
             end
             if (attempts == MAX_ATTEMPTS - 1) begin
-                // Trigger access denied on the 3rd incorrect attempt
+            
                 access_denied <= 1;
                 lock_timer_active <= 1;
             end else begin
-                access_denied <= 0;  // Do not deny access until max attempts reached
+                access_denied <= 0;  
             end
         end
     end
